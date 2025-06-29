@@ -26,16 +26,19 @@ architecture RTL of transpose_buffer_cell is
 
 begin
     Mux_tb: ENTITY work.mux_2to1(behavior)
-    GENERIC MAP(N => N)--14
+    GENERIC MAP(N => N)
     PORT MAP(sel => direction, in_0 => value0, in_1 => value1 , y => mux_holder );
 
     register_process : process(clk, rst) is
     begin
+        --reset assíncrono
         if rst='1' then
+            --valor escolhido é 0
             chosenValue <= (others => '0');
         
         elsif rising_edge(clk) then
             if enable='1' then
+                --na subida da borda do  clock, se o enable estiver ativado, o valor escolhido é aquele escolhido pelo mux pelo sinal direction
                 chosenValue <= mux_holder;
             end if;
         end if;
