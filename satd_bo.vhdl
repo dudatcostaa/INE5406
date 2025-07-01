@@ -65,7 +65,7 @@ begin
             out_4 => t2_out_4, out_5 => t2_out_5, out_6 => t2_out_6, out_7 => t2_out_7
         );
 
-    ABS: entity work.abs_layer
+    ABS: entity work.abs_layer(comb)
         generic map (N => N+6)
         port map (
             in_0 => t2_out_0, in_1 => t2_out_1, in_2 => t2_out_2, in_3 => t2_out_3,
