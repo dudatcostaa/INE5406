@@ -7,7 +7,7 @@ entity accumulator is
     --max output size é 20
     --entrada size é 14
     generic(
-        NEntrada: positive:= 8;
+        NEntrada: positive:= 14;
         NMaxSaida: positive:=20
     );
 
