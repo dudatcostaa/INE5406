@@ -14,6 +14,7 @@ entity satd_bo is
         input41,input42,input51,input52,input61,input62,input71,input72: in unsigned(N-1 downto 0); -- all of the 16 inputs
         enable_inputs       : in std_logic;
         enable_tb           : in std_logic;
+        enable_psatd        : in std_logic;
         change_tb_direction : in std_logic;
 
         satd_result : out unsigned(N+11 downto 0)
@@ -30,7 +31,7 @@ architecture structure of satd_bo is
 
     signal abs_0, abs_1, abs_2, abs_3, abs_4, abs_5, abs_6, abs_7 : unsigned(N+5 downto 0); -- saida da abs_layer
 
-    signal sum : unsigned(16 downto 0); -- soma total
+    signal tree_sum : unsigned(N+8 downto 0); -- soma da arvore
 begin
     DL: entity work.difference_layer(arch)
         generic map(
@@ -79,6 +80,27 @@ begin
             in_4 => t2_out_4, in_5 => t2_out_5, in_6 => t2_out_6, in_7 => t2_out_7,
             out_0 => abs_0, out_1 => abs_1, out_2 => abs_2, out_3 => abs_3,
             out_4 => abs_4, out_5 => abs_5, out_6 => abs_6, out_7 => abs_7
+        );
+
+    SUM: entity work.sum_tree_8inputs(sum)
+        generic map (N => N+6)
+        port map (
+            in_0 => abs_0, in_1 => abs_1, in_2 => abs_2, in_3 => abs_3,
+            in_4 => abs_4, in_5 => abs_5, in_6 => abs_6, in_7 => abs_7,
+            out_0 => tree_sum
+        );
+
+    ACC: entity work.accumulator(accumulation)
+        generic map (
+            NEntrada => N + 9,
+            NMaxSaida => N + 12
+        )
+        port map (
+            clk => clk,
+            rst => rst,
+            enable => '1',
+            inputValues => tree_sum,
+            outputAcc => satd_result
         );
 
 end architecture;
