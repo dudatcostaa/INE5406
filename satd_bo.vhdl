@@ -16,7 +16,7 @@ entity satd_bo is
         enable_tb           : in std_logic;
         change_tb_direction : in std_logic;
 
-        satd_result : out unsigned(16 downto 0)
+        satd_result : out unsigned(N+11 downto 0)
     );
 end entity;
 
