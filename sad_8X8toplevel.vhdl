@@ -5,11 +5,9 @@ use ieee.numeric_std.all;
 
 
 entity sad_8X8toplevel is
-
-        generic (
+    generic (
         N : positive:= 8 -- número de bits das entradas e da saída
     );
-
     port(
 
         clk : in std_logic;
@@ -19,7 +17,7 @@ entity sad_8X8toplevel is
         direction_transpose_buffer : in  std_logic;
 
         input01,input02,input11,input12,input21,input22,input31,input32, 
-        input41,input42,input51,input52,input61,input62,input71,input72: in unsigned(N-1 downto 0);
+        input41,input42,input51,input52,input61,input62,input71,input72: in std_logic_vector(N-1 downto 0);
 
         done: out std_logic;
 
@@ -86,8 +84,17 @@ begin
             N => N
         )
         port map(
-            clk     => clk,
-            rst     => rst,
+            clk             => clk,
+            rst             => rst,
+            rst_tb          => reset_transpose_buffer,
+            rst_psatd       => reset_psatd,
+            rst_satd        => reset_satd,
+
+            enable_inputs       => enable_inputs,
+            enable_tb           => enable_transpose_buffer,
+            enable_psatd        => enable_psatd,
+            enable_satd         => enable_satd,
+
             input01 => input01,
             input02 => input02,
             input11 => input11,
@@ -103,11 +110,7 @@ begin
             input61 => input61,
             input62 => input62,
             input71 => input71,
-            input72 => input72,
-            enable_inputs       => enable_inputs,
-            enable_tb           => enable_transpose_buffer,
-            change_tb_direction => change_transpose_buffer_direction,
-            satd_result         => satd
+            input72 => input72
         );
     
     
