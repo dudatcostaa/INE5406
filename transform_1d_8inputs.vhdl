@@ -32,14 +32,14 @@ begin
     butterfly2_0_3: component butterfly2 generic map (N => N+1) port map (in_6, in_7, wire_0_6, wire_0_7);
 
     -- layer 1
-    butterfly2_1_0: component butterfly2 generic map (N => N+2) port map (wire_0_0, wire_0_1, wire_1_0, wire_1_1);
-    butterfly2_1_1: component butterfly2 generic map (N => N+2) port map (wire_0_2, wire_0_3, wire_1_2, wire_1_3);
-    butterfly2_1_2: component butterfly2 generic map (N => N+2) port map (wire_0_4, wire_0_5, wire_1_4, wire_1_5);
-    butterfly2_1_3: component butterfly2 generic map (N => N+2) port map (wire_0_6, wire_0_7, wire_1_6, wire_1_7);
+    butterfly2_1_0: component butterfly2 generic map (N => N+2) port map (wire_0_0, wire_0_2, wire_1_0, wire_1_1);
+    butterfly2_1_1: component butterfly2 generic map (N => N+2) port map (wire_0_1, wire_0_3, wire_1_2, wire_1_3);
+    butterfly2_1_2: component butterfly2 generic map (N => N+2) port map (wire_0_4, wire_0_6, wire_1_4, wire_1_5);
+    butterfly2_1_3: component butterfly2 generic map (N => N+2) port map (wire_0_5, wire_0_7, wire_1_6, wire_1_7);
 
     -- layer 2 (last)
-    butterfly2_2_0: component butterfly2 generic map (N => N+3) port map (wire_1_0, wire_1_1, out_0, out_1);
-    butterfly2_2_1: component butterfly2 generic map (N => N+3) port map (wire_1_2, wire_1_3, out_2, out_3);
-    butterfly2_2_2: component butterfly2 generic map (N => N+3) port map (wire_1_4, wire_1_5, out_4, out_5);
-    butterfly2_2_3: component butterfly2 generic map (N => N+3) port map (wire_1_6, wire_1_7, out_6, out_7);
+    butterfly2_2_0: component butterfly2 generic map (N => N+3) port map (wire_1_0, wire_1_4, out_0, out_1);
+    butterfly2_2_1: component butterfly2 generic map (N => N+3) port map (wire_1_1, wire_1_5, out_2, out_3);
+    butterfly2_2_2: component butterfly2 generic map (N => N+3) port map (wire_1_2, wire_1_6, out_4, out_5);
+    butterfly2_2_3: component butterfly2 generic map (N => N+3) port map (wire_1_3, wire_1_7, out_6, out_7);
 end architecture arch;
