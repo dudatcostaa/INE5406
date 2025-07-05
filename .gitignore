@@ -1,3 +1,15 @@
 *.cf
 *.vcd
 .project
+.settings
+AP3-05235A-Grupo-A
+db
+incremental_db
+output_files
+simulation
+work
+.library_mapping.xml
+*.bak
+*.rpt
+*.txt
+*.wlf

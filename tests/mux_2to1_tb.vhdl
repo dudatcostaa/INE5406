@@ -9,14 +9,11 @@ architecture tb of mux_2to1_tb is
 
     constant N : positive := 8;
 
-    -- Entradas e saída
     signal sel         : std_logic := '0';
     signal in_0, in_1  : signed(N - 1 downto 0);
     signal y           : signed(N - 1 downto 0);
 
 begin
-
-    -- Instancia o MUX
     uut: entity work.mux_2to1
         generic map (N => N)
         port map (
@@ -26,7 +23,6 @@ begin
             y    => y
         );
 
-    -- Processo de estímulo
     stim_proc: process
         variable expected : signed(N - 1 downto 0);
     begin

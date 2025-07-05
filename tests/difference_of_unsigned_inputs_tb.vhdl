@@ -9,13 +9,10 @@ architecture tb of difference_of_unsigned_inputs_tb is
 
     constant N : positive := 8;
 
-    -- Sinais de entrada e saída
     signal A, B : unsigned(N-1 downto 0);
     signal S    : signed(N downto 0);
 
 begin
-
-    -- Instancia o módulo a ser testado
     uut: entity work.difference_of_unsigned_inputs
         generic map (N => N)
         port map (
@@ -24,7 +21,6 @@ begin
             S => S
         );
 
-    -- Processo de teste
     stim_proc: process
         variable expected : signed(N downto 0);
     begin

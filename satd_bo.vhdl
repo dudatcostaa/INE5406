@@ -12,7 +12,7 @@ entity satd_bo is
 
         rst                 : in std_logic;
         rst_tb              : in std_logic;
-        rst_psad            : in std_logic;
+        rst_psatd           : in std_logic;
         rst_satd            : in std_logic;
 
         enable_inputs       : in std_logic;
@@ -23,21 +23,23 @@ entity satd_bo is
         change_tb_direction : in std_logic;
 
         input01,input02,input11,input12,input21,input22,input31,input32, 
-        input41,input42,input51,input52,input61,input62,input71,input72: in std_logic_vector(N-1 downto 0); -- all of the 16 inputs
+        input41,input42,input51,input52,input61,input62,input71,input72: in std_logic_vector(N-1 downto 0); -- entradas de 8 bits
 
-        satd_result : out unsigned(N+11 downto 0)
+        satd_result : out std_logic_vector(N+11 downto 0)
     );
 end entity;
 
 architecture structure of satd_bo is
     signal u_input01,u_input02,u_input11,u_input12,u_input21,u_input22,u_input31,u_input32, 
-        u_input41,u_input42,u_input51,u_input52,u_input61,u_input62,u_input71,u_input72: unsigned(N-1 downto 0); -- all of the 16 inputs
-    signal in_0, in_1, in_2, in_3, in_4, in_5, in_6, in_7 : signed(N downto 0);
-    signal t1_out_0, t1_out_1, t1_out_2, t1_out_3, t1_out_4, t1_out_5, t1_out_6, t1_out_7 : signed(N+2 downto 0); -- saida da T1: N+3 bits
+        u_input41,u_input42,u_input51,u_input52,u_input61,u_input62,u_input71,u_input72: unsigned(N-1 downto 0); -- entradas de 8 bits (N-1 to 0), convertido para unsigned
+		  
+    signal in_0, in_1, in_2, in_3, in_4, in_5, in_6, in_7 : signed(N downto 0); -- saida de DL 9 bits (N to 0)
+	 
+    signal t1_out_0, t1_out_1, t1_out_2, t1_out_3, t1_out_4, t1_out_5, t1_out_6, t1_out_7 : signed(N+3 downto 0); -- saida da T1: 12 bits (N+2 to 0)
 
-    signal tb_out_0, tb_out_1, tb_out_2, tb_out_3, tb_out_4, tb_out_5, tb_out_6, tb_out_7 : signed(N+2 downto 0); -- saida da transposta: N+3 bits
+    signal tb_out_0, tb_out_1, tb_out_2, tb_out_3, tb_out_4, tb_out_5, tb_out_6, tb_out_7 : signed(N+3 downto 0); -- saida da transposta: 12 bits (N+2 to 0)
     
-    signal t2_out_0, t2_out_1, t2_out_2, t2_out_3, t2_out_4, t2_out_5, t2_out_6, t2_out_7 : signed(N+5 downto 0); -- saida da T2: N+6 bits
+    signal t2_out_0, t2_out_1, t2_out_2, t2_out_3, t2_out_4, t2_out_5, t2_out_6, t2_out_7 : signed(N+6 downto 0); -- saida da T2: 15 bits (N+5 to 0)
 
     signal abs_0, abs_1, abs_2, abs_3, abs_4, abs_5, abs_6, abs_7 : unsigned(N+5 downto 0); -- saida da abs_layer
 
@@ -51,6 +53,7 @@ begin
         port map (
             clk => clk,
             rst => rst,
+				enable => enable_inputs,
             in_01 => input01, in_02 => input02, in_11 => input11, in_12 => input12,
             in_21 => input21, in_22 => input22, in_31 => input31, in_32 => input32,
             in_41 => input41, in_42 => input42, in_51 => input51, in_52 => input52,
@@ -75,13 +78,16 @@ begin
         generic map (N => N)
         port map (
             in_0 => in_0, in_1 => in_1, in_2 => in_2, in_3 => in_3,
+				
             in_4 => in_4, in_5 => in_5, in_6 => in_6, in_7 => in_7,
+				
             out_0 => t1_out_0, out_1 => t1_out_1, out_2 => t1_out_2, out_3 => t1_out_3,
+				
             out_4 => t1_out_4, out_5 => t1_out_5, out_6 => t1_out_6, out_7 => t1_out_7
         );
 
     TB: entity work.transpose_buffer_8x8(transposer)
-        generic map (N => N+3)
+        generic map (N => N+4) -- N+4 em vez de N+3 pois tem que levar em consideracao o N-1 da entidade
         port map (
             clk => clk,
             rst => rst_tb,
@@ -103,7 +109,7 @@ begin
         );
 
     ABSL: entity work.abs_layer(comb)
-        generic map (N => N+6)
+        generic map (N => N+7) -- mesmo caso do transpose buffer
         port map (
             in_0 => t2_out_0, in_1 => t2_out_1, in_2 => t2_out_2, in_3 => t2_out_3,
             in_4 => t2_out_4, in_5 => t2_out_5, in_6 => t2_out_6, in_7 => t2_out_7,
@@ -126,7 +132,7 @@ begin
         )
         port map (
             clk => clk,
-            rst => rst_psad,
+            rst => rst_psatd,
             enable => enable_psatd,
             inputValues => tree_sum,
             outputAcc => psatd_result
@@ -136,9 +142,9 @@ begin
     begin
         if rising_edge(clk) then
             if rst_satd = '1' then
-                satd_result <= 0;
+                satd_result <= (others => '0');
             elsif enable_satd = '1' then
-                satd <= psatd_result;
+                satd_result <= std_logic_vector(psatd_result);
             end if;
         end if;
     end process;

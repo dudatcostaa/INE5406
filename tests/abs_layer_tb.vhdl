@@ -9,19 +9,15 @@ architecture tb of abs_layer_tb is
 
     constant N : positive := 14;
 
-    -- Sinais de entrada
     signal in_0, in_1, in_2, in_3, in_4, in_5, in_6, in_7 : signed(N-1 downto 0);
 
-    -- Sinais de saída
-    signal out_0, out_1, out_2, out_3, out_4, out_5, out_6, out_7 : unsigned(N-1 downto 0);
+    signal out_0, out_1, out_2, out_3, out_4, out_5, out_6, out_7 : unsigned(N-2 downto 0);
 
-    -- Tipo auxiliar para array de entradas/saídas
     type signed_array   is array (0 to 7) of signed(N-1 downto 0);
     type unsigned_array is array (0 to 7) of unsigned(N-1 downto 0);
 
 begin
 
-    -- Instancia o módulo a ser testado
     uut: entity work.abs_layer
         generic map (N => N)
         port map (
@@ -31,9 +27,7 @@ begin
             out_4 => out_4, out_5 => out_5, out_6 => out_6, out_7 => out_7
         );
 
-    -- Processo de estímulo
     stim_proc: process
-        -- variáveis auxiliares para comparar resultado
         variable input_vals  : signed_array;
         variable expected_abs : unsigned_array;
     begin
@@ -42,12 +36,10 @@ begin
         input_vals := (to_signed(3, N), to_signed(12, N), to_signed(1, N), to_signed(9, N),
                        to_signed(4, N), to_signed(7, N), to_signed(15, N), to_signed(0, N));
         
-        -- Atribui sinais
         in_0 <= input_vals(0); in_1 <= input_vals(1); in_2 <= input_vals(2); in_3 <= input_vals(3);
         in_4 <= input_vals(4); in_5 <= input_vals(5); in_6 <= input_vals(6); in_7 <= input_vals(7);
         wait for 10 ns;
 
-        -- Verifica resultado
         for i in 0 to 7 loop
             expected_abs(i) := unsigned(abs(input_vals(i)));
         end loop;

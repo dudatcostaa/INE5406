@@ -16,6 +16,6 @@ end entity adder;
 architecture sum of adder is
 begin
 
-    out_0 <= in_0 + in_1;
+    out_0 <= resize(in_0 + in_1, N+1);
 
 end architecture sum;

@@ -15,14 +15,14 @@ entity accumulator is
         clk : in std_logic;
         rst : in std_logic;
         enable : in std_logic;
-        inputValues : in signed(NEntrada-1 downto 0);
-        outputAcc: out signed(NMaxSaida-1 downto 0)
+        inputValues : in unsigned(NEntrada-1 downto 0);
+        outputAcc: out unsigned(NMaxSaida-1 downto 0)
     );
 end entity accumulator;
 
 architecture accumulation of accumulator is
 
-    signal acc_reg : signed(NMaxSaida-1 downto 0):= (others => '0');
+    signal acc_reg : unsigned(NMaxSaida-1 downto 0):= (others => '0');
     
 
 begin
@@ -30,9 +30,9 @@ begin
         begin
             if rising_edge(clk) then
                 if rst = '1' then
-                    outputAcc <= (others => '0');
+                    acc_reg <= (others => '0');
                 elsif enable = '1' then
-                    acc_reg <= acc_reg + inputValues;
+						  acc_reg <= acc_reg + resize(inputValues, NMaxSaida);
                 end if;
             end if;
         end process;

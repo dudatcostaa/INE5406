@@ -7,16 +7,13 @@ end entity;
 
 architecture tb of butterfly2_tb is
 
-    -- Parâmetro da largura dos dados
     constant N : positive := 8;
 
-    -- Sinais para estímulo
     signal in_0, in_1 : signed(N-1 downto 0);
     signal out_0, out_1 : signed(N downto 0);
 
 begin
 
-    -- Instancia o UUT
     uut: entity work.butterfly2
         generic map (
             N => N
@@ -28,7 +25,6 @@ begin
             out_1 => out_1
         );
 
-    -- Processo de estímulo
     stim_proc: process
         variable expected_sum  : signed(N downto 0);
         variable expected_diff : signed(N downto 0);

@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 
 
-entity sad_8X8toplevel is
+entity satd_toplevel is
     generic (
         N : positive:= 8 -- número de bits das entradas e da saída
     );
@@ -21,49 +21,49 @@ entity sad_8X8toplevel is
 
         done: out std_logic;
 
-        satd : out unsigned(N+11 downto 0)
+        satd : out std_logic_vector(N+11 downto 0)
     );
-end entity sad_8X8toplevel;
+end entity satd_toplevel;
 
-architecture topLeveling of sad_8X8toplevel is
+architecture topLeveling of satd_toplevel is
     signal enable_inputs, reset_transpose_buffer, enable_transpose_buffer, change_transpose_buffer_direction, reset_psatd, enable_psatd, reset_satd, enable_satd  : std_logic;
     
-    component satd_bc
-        port(
-            clock               : in  std_logic;
-            reset               : in  std_logic;
-            enable              : in  std_logic;
-            enable_inputs       : out std_logic;
-            reset_tb            : out std_logic;
-            enable_tb           : out std_logic;
-            change_tb_direction : out std_logic;
-            reset_psatd         : out std_logic;
-            enable_psatd        : out std_logic;
-            reset_satd          : out std_logic;
-            enable_satd         : out std_logic;
-            done                : out std_logic
-        );
-    end component satd_bc;
-
-    component satd_bo
-        generic(N : positive := 8);
-        port(
-            clk                                                                                                                                            : in  std_logic;
-            rst                                                                                                                                            : in  std_logic;
-            input01, input02, input11, input12, input21, input22, input31, input32, input41, input42, input51, input52, input61, input62, input71, input72 : in  unsigned(N-1 downto 0);
-            enable_inputs                                                                                                                                  : in  std_logic;
-            enable_tb                                                                                                                                      : in  std_logic;
-            change_tb_direction                                                                                                                            : in  std_logic;
-            satd_result                                                                                                                                    : out unsigned(16 downto 0)
-        );
-    end component satd_bo;
+--    component satd_bc
+--        port(
+--            clock               : in  std_logic;
+--            reset               : in  std_logic;
+--            enable              : in  std_logic;
+--            enable_inputs       : out std_logic;
+--            reset_tb            : out std_logic;
+--            enable_tb           : out std_logic;
+--            change_tb_direction : out std_logic;
+--            reset_psatd         : out std_logic;
+--            enable_psatd        : out std_logic;
+--            reset_satd          : out std_logic;
+--            enable_satd         : out std_logic;
+--            done                : out std_logic
+--        );
+--    end component satd_bc;
+--
+--    component satd_bo
+--        generic(N : positive := 8);
+--        port(
+--            clk                                                                                                                                            : in  std_logic;
+--            rst                                                                                                                                            : in  std_logic;
+--            input01, input02, input11, input12, input21, input22, input31, input32, input41, input42, input51, input52, input61, input62, input71, input72 : in  unsigned(N-1 downto 0);
+--            enable_inputs                                                                                                                                  : in  std_logic;
+--            enable_tb                                                                                                                                      : in  std_logic;
+--            change_tb_direction                                                                                                                            : in  std_logic;
+--            satd_result                                                                                                                                    : out unsigned(16 downto 0)
+--        );
+--    end component satd_bo;
 
     
 
 begin
 
     
-    satd_bc_inst : component satd_bc
+    satd_bc_inst : entity work.satd_bc(behavior)
         port map(
             clock               => clk,
             reset               => rst,
@@ -79,7 +79,7 @@ begin
             done                => done
         );
 
-    satd_bo_inst : component satd_bo
+    satd_bo_inst : entity work.satd_bo(structure)
         generic map(
             N => N
         )
@@ -94,6 +94,10 @@ begin
             enable_tb           => enable_transpose_buffer,
             enable_psatd        => enable_psatd,
             enable_satd         => enable_satd,
+				
+			change_tb_direction => change_transpose_buffer_direction,
+
+            satd_result => satd,
 
             input01 => input01,
             input02 => input02,

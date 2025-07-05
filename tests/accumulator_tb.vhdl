@@ -7,23 +7,19 @@ end entity;
 
 architecture tb of accumulator_tb is
 
-    -- Parâmetros
     constant NEntrada  : positive := 8;
     constant NMaxSaida : positive := 20;
 
-    -- Sinais para estímulo
     signal clk        : std_logic := '0';
     signal rst        : std_logic := '0';
     signal enable     : std_logic := '0';
-    signal inputValues: signed(NEntrada-1 downto 0) := (others => '0');
-    signal outputAcc  : signed(NMaxSaida-1 downto 0);
+    signal inputValues: unsigned(NEntrada-1 downto 0) := (others => '0');
+    signal outputAcc  : unsigned(NMaxSaida-1 downto 0);
 
-    -- Clock period
     constant clk_period : time := 10 ns;
 
 begin
 
-    -- Instancia o UUT (Unit Under Test)
     uut: entity work.accumulator
         generic map (
             NEntrada => NEntrada,
@@ -37,7 +33,6 @@ begin
             outputAcc => outputAcc
         );
 
-    -- Geração de clock
     clk_process: process
     begin
         while now < 200 ns loop
@@ -49,38 +44,36 @@ begin
         wait;
     end process;
 
-    -- Processo de estímulo
     stim_proc: process
-        variable expected : signed(NMaxSaida-1 downto 0) := (others => '0');
+        variable expected : unsigned(NMaxSaida-1 downto 0) := (others => '0');
     begin
         -- Reset inicial
         rst <= '1';
         wait for clk_period;
         rst <= '0';
 
-        -- Teste 1: acumular 10 + 5 + (-3)
+        -- Teste 1: acumular 10 + 5 + 3
         enable <= '1';
 
-        inputValues <= to_signed(10, NEntrada);
-        expected := expected + to_signed(10, NMaxSaida);
+        inputValues <= to_unsigned(10, NEntrada);
+        expected := expected + to_unsigned(10, NMaxSaida);
         wait for clk_period;
 
-        inputValues <= to_signed(5, NEntrada);
-        expected := expected + to_signed(5, NMaxSaida);
+        inputValues <= to_unsigned(5, NEntrada);
+        expected := expected + to_unsigned(5, NMaxSaida);
         wait for clk_period;
 
-        inputValues <= to_signed(-3, NEntrada);
-        expected := expected + to_signed(-3, NMaxSaida);
+        inputValues <= to_unsigned(3, NEntrada);
+        expected := expected + to_unsigned(3, NMaxSaida);
         wait for clk_period;
 
-        -- Verificação
         assert outputAcc = expected
             report "Erro: valor acumulado incorreto no teste 1. Esperado: " & integer'image(to_integer(expected))
             severity error;
 
         -- Teste 2: disable = 0, não deve acumular
         enable <= '0';
-        inputValues <= to_signed(100, NEntrada); -- valor ignorado
+        inputValues <= to_unsigned(100, NEntrada); -- valor ignorado
         wait for clk_period;
 
         assert outputAcc = expected
@@ -92,13 +85,11 @@ begin
         wait for clk_period;
         rst <= '0';
 
-        assert outputAcc = to_signed(0, NMaxSaida)
+        assert outputAcc = to_unsigned(0, NMaxSaida)
             report "Erro: reset falhou"
             severity error;
 
-        -- Fim da simulação
         wait;
-
     end process;
 
 end architecture tb;

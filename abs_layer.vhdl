@@ -15,12 +15,12 @@ end entity abs_layer;
 
 architecture comb of abs_layer is
 begin
-    out_0 <= unsigned(abs(in_0));
-    out_1 <= unsigned(abs(in_1));
-    out_2 <= unsigned(abs(in_2));
-    out_3 <= unsigned(abs(in_3));
-    out_4 <= unsigned(abs(in_4));
-    out_5 <= unsigned(abs(in_5));
-    out_6 <= unsigned(abs(in_6));
-    out_7 <= unsigned(abs(in_7));
+    out_0 <= resize(unsigned(abs(in_0)), N-1);
+    out_1 <= resize(unsigned(abs(in_1)), N-1);
+    out_2 <= resize(unsigned(abs(in_2)), N-1);
+    out_3 <= resize(unsigned(abs(in_3)), N-1);
+    out_4 <= resize(unsigned(abs(in_4)), N-1);
+    out_5 <= resize(unsigned(abs(in_5)), N-1);
+    out_6 <= resize(unsigned(abs(in_6)), N-1);
+    out_7 <= resize(unsigned(abs(in_7)), N-1);
 end architecture comb;

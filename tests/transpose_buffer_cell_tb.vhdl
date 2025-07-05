@@ -9,7 +9,6 @@ architecture tb of transpose_buffer_cell_tb is
 
     constant N : positive := 8;
 
-    -- Sinais de entrada
     signal clk          : std_logic := '0';
     signal rst          : std_logic := '0';
     signal enable       : std_logic := '0';
@@ -17,15 +16,12 @@ architecture tb of transpose_buffer_cell_tb is
     signal value0       : signed(N-1 downto 0);
     signal value1       : signed(N-1 downto 0);
 
-    -- Saída
     signal chosenValue  : signed(N-1 downto 0);
 
-    -- Clock period
     constant clk_period : time := 10 ns;
 
 begin
 
-    -- Instancia a UUT
     uut: entity work.transpose_buffer_cell
         generic map (N => N)
         port map (
@@ -38,7 +34,6 @@ begin
             chosenValue => chosenValue
         );
 
-    -- Geração de clock
     clk_process: process
     begin
         while now < 200 ns loop
@@ -50,7 +45,6 @@ begin
         wait;
     end process;
 
-    -- Processo de estímulo
     stim_proc: process
         variable expected : signed(N-1 downto 0);
     begin
