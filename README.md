@@ -30,4 +30,7 @@ ADDER - Soma duas entradas de N bits unsigneds e retorna uma saida de N+1 bits
 
 
 Ferramentas Utilizadas:
-Quartus, GTKWave, GHDL, VSCode com plugin da SIGASI.
+Quartus II, GTKWave, GHDL, MODELSim, VSCode com plugin da SIGASI.
+
+Além disso, o Lucas desenvolveu um google sheet's capaz de calcular todas as etapas de todas as borboletas com as 16 entradas.
+https://docs.google.com/spreadsheets/d/1lWjL5GMqJKJrzLq7CQQ9KBN26bHAwVbJFeXO_GNMZsg/edit?usp=sharing
