@@ -1,0 +1,26 @@
+{
+    "dupla": {
+        "nome": "dupla 1",
+        "alunos": [
+          {"nome": "Sofia Gazolla da Costa Silva", "matricula": "24208690"},
+          {"nome": "Maria Eduarda Teixeira Costa", "matricula": "24203054"}
+        ]
+    },
+    "quartus": {
+        "os": "Ubuntu (imagem Quartus II)",
+        "versao": "13.0.1 (completar)",
+        "fpga": {
+            "familia": "Cyclone II",
+            "dispositivo": "EP2C5AF256A7"
+        }
+    },
+    "utilizacao": {
+        "total combinational functions": 51,
+        "dedicated logic registers": 57,
+        "total pins": 41
+    },
+    "atraso": {
+        "Fmax": 164.02,
+        "unidade": "MHz"
+    }
+}
